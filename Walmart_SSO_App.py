@@ -153,6 +153,8 @@ if luminate_file and variants_file:
             if ratio < 0.6:
                 df.loc[group_idx, 'SSO_Qty'] = 0
 
+        df['Total_WHPKs'] = df['SSO_Qty'] / df['WHPK_Qty']
+
         # Generate downloadable CSV
         csv_output = df.to_csv(index=False).encode('utf-8')
         st.success("SSO allocation complete!")
