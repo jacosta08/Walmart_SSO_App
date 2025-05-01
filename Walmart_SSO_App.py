@@ -44,7 +44,10 @@ if luminate_file and variants_file:
         ]
         df_luminate.drop(columns=columns_to_drop, inplace=True, errors='ignore')
 
-        df_luminate["Average_POS"] = df_luminate["POS_Qty"] / 4
+        #Updated logic here
+        df_luminate["POS_Qty"] = df_luminate["POS_Qty"].apply(lambda x: max(x, 0))
+        df_luminate["Average_POS"] = df_luminate["POS_Qty"].apply(lambda x: x / 4 if x > 0 else 0.25)
+
         df_luminate["Total_Pipeline_WM"] = (
             df_luminate["Curr_Str_On_Hand_Qty"] +
             df_luminate["Curr_Str_In_Transit_Qty"] +
@@ -152,7 +155,7 @@ if luminate_file and variants_file:
 
             if ratio < 0.6:
                 df.loc[group_idx, 'SSO_Qty'] = 0
-
+        
         df['Total_WHPKs'] = df['SSO_Qty'] / df['WHPK_Qty']
 
         # Generate downloadable CSV
